@@ -93,7 +93,7 @@
               </div>
 
               <hr style="margin-top:0px;">
-              <a href="<?php echo strtolower($this->uri->segment(1)); ?>/<?php echo strtolower($this->uri->segment(2)); ?>/<?php echo strtolower($this->uri->segment(3)); ?>.html" class="btn btn-default"><< Kembali</a>
+              <a href="dashboard.html" class="btn btn-default"><< Kembali</a>
 
               <?php endif; ?>
               

@@ -1,0 +1,11 @@
+.link-agenda {
+  width: 250px;
+}
+.icon-agenda {
+  padding: 6px;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+.border-grey {
+  border-color: #ddd !important;
+}

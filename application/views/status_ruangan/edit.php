@@ -41,7 +41,7 @@ $link4 = strtolower($this->uri->segment(4));
                     </div>
                   </div>
                   <hr>
-                  <a href="<?php echo $link1; ?>/<?php echo $link2; ?>.html" class="btn btn-default"><< Kembali</a>
+                  <a href="dashboard.html" class="btn btn-default"><< Kembali</a>
                   <button type="submit" name="btnupdate" class="btn btn-primary" style="float:right;">Simpan</button>
                 </form>
             </div>

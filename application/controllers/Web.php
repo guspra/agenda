@@ -6,11 +6,13 @@ class Web extends CI_Controller {
 
 	public function index()
 	{
-		$data['judul_web'] = $this->Mcrud->judul_web();
-
-		$this->load->view('header', $data);
-		$this->load->view('dashboard', $data);
-		$this->load->view('footer', $data);
+		$ceks = $this->session->userdata('username');
+		if(isset($ceks)) {
+			// $this->load->view('404_content');
+			redirect('dashboard');
+		}else{ 
+			redirect('web/login');
+		}
 	}
 
 	public function login()
@@ -21,9 +23,10 @@ class Web extends CI_Controller {
 			redirect('dashboard');
 		}else{
 			$data['judul_web'] = "Halaman Login - ".$this->Mcrud->judul_web();
-			$this->load->view('log/header', $data);
-			$this->load->view('log/login', $data);
-			$this->load->view('log/footer', $data);
+			// $this->load->view('log/header', $data);
+			// $this->load->view('log/login', $data);
+			// $this->load->view('log/footer', $data);
+			$this->load->view('log/signin', $data);
 
 			if (isset($_POST['btnlogin'])){
 				$username = htmlentities(strip_tags($_POST['username']));
@@ -36,7 +39,7 @@ class Web extends CI_Controller {
 
 				try {
 					$client = new Client([
-						'base_uri' => 'http://localhost/brugakapi/index.php/',
+						'base_uri' => 'localhost/agendaapi/index.php/',
 						'headers' => [
 							'Client-Service' => 'frontend-client',
 							'Auth-Key' => 'simplerestapi',

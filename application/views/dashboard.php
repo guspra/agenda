@@ -1,107 +1,131 @@
-<?php
-$level  = $this->session->userdata('level');
-?>
-<!-- begin #content -->
-<!-- <div id="content" class="content dashboard"> -->
-	<!-- begin breadcrumb -->
-	<!-- <ol class="breadcrumb pull-right">
-	  <li class="active">Dashboard</li>
-	</ol> -->
-	<!-- end breadcrumb -->
-	<!-- begin page-header -->
-	<!-- Dashboard Superadmin dan Koordinator Wilayah -->
-	
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="bdrs-3 ov-h bgc-white bd">
+            <div class="bgc-deep-purple-500 ta-c p-30">
+              <h1 class="fw-300 mB-5 lh-1 c-white">
+                <?php echo $this->Mcrud->hari_id($hari_ini); ?>
+              </h1>
+              <h3 class="c-white"><?php echo $this->Mcrud->tgl_id($hari_ini, 'full'); ?></h3>
+            </div>
+            <div class="pos-r">
+              <button
+                type="button"
+                class="mT-nv-50 pos-a r-10 t-2 btn cur-p bdrs-50p p-0 w-3r h-3r btn-warning"
+                data-toggle="modal"
+                data-target="#add_agenda"
+              >
+                <i class="ti-plus"></i>
+              </button>
+              <ul class="m-0 p-0 mT-20">
+                <?php if ($agenda_today != null):
+                  foreach ($agenda_today as $row): ?>
+                <li class="bdB peers ai-c jc-sb fxw-nw">
+                  <a
+                    class="td-n p-20 peers fxw-nw mR-20 peer-greed c-grey-900 link-agenda"
+                    href="javascript:void(0);"
+                    data-toggle="modal"
+                    data-target="#detail_agenda<?php echo $row['id']; ?>"
+                    ><div class="peer mR-15">
+                      <i class="fa fa-fw fa-clock-o c-green-500"></i>
+                    </div>
+                    <div class="peer">
+                      <span class="fw-600"><?php echo $row['nama']; ?></span>
+                      <div class="c-grey-600">
+                        <span class="c-grey-700"><?php echo $this->Mcrud->jam($row['waktu']); ?> - </span
+                        ><i><?php echo $row['tempat'] ?></i>
+                      </div>
+                    </div></a
+                  >
+                  <div class="peers mR-15">
+                    <div class="peer">
+                      <a
+                        href=""
+                        class="td-n c-deep-purple-500 cH-blue-500 fsz-md p-5"
+                        data-toggle="modal"
+                        data-target="#edit_agenda<?php echo $row['id']; ?>"
+                        ><i class="ti-pencil"></i
+                      ></a>
+                    </div>
+                    <div class="peer">
+                      <a
+                        href=""
+                        class="td-n c-red-500 cH-blue-500 fsz-md p-5"
+                        data-toggle="modal"
+                        data-target="#delete_agenda<?php echo $row['id']; ?>"
+                        ><i class="ti-trash"></i
+                      ></a>
+                    </div>
+                  </div>
+                </li>
+                <?php endforeach;
+                else : ?>
+                  <div class="p-20"><h6 class="ta-c fsz-sm">-- Belum ada agenda --</h6></div>
+                <?php endif; ?>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8"><div id="calendar"></div></div>
+      </div>
 
-	<div class="card border-0 p-20 shadow overflow-hidden">
-		<div class="card-body">
-			<h1 class="page-header">Kebersihan Ruangan</h1>
-			<h5><?php echo $this->Mcrud->hari_id(date('d-m-Y')); ?>, <?php echo $this->Mcrud->tgl_id(date('d-m-Y'),'full'); ?></h5>
-			<hr class="mt-15 mb-15">
-			<div class="c-content-accordion-1 c-theme dashboard-all">
-				<div class="panel-group" id="accordion" role="tablist">
-					<?php
-						foreach ($waktu as $key):
-					?>
-					<div class="panel panel-info">
-						<div class="panel-heading" role="tab" id="heading<?php echo $key; ?>">
-							<h4 class="panel-title">
-								<a class="c-font-bold c-font-19"  data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $key; ?>" aria-expanded="true" aria-controls="collapse<?php echo $key; ?>"><?php echo strtoupper($key); ?></a>
-							</h4>
-						</div>
-						<div id="collapse<?php echo $key; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading<?php echo $key; ?>">
-							<div class="panel-body c-font-18">
-								<div class="row">
-									<?php foreach ($status[$key] as $subkey => $subval):?>
-										<div class="col-md-2 col-xs-4 text-center">
-											<a href="<?php
-												if ($subval['status_ob'] == 'BELUM' && $subval['status_pengawas'] == 'BELUM') {
-													if ($level == 'MR.CLEAN') {
-														echo "status_ruangan/v/t/" . hashids_encrypt($subval['id_ruangan']);
-													} else {
-														echo "status_ruangan/v/d/" . hashids_encrypt($subval['id_status_ruangan']);
-													}
-												} elseif ($subval['status_ob'] == 'SUDAH' && $subval['status_pengawas'] == 'SUDAH') {
-													echo "status_ruangan/v/d/" . hashids_encrypt($subval['id_status_ruangan']);
-												} elseif ($subval['status_ob'] == 'SUDAH' && $subval['status_pengawas'] == 'BELUM') {
-													if ($level == 'PENGAWAS') {
-														echo "status_ruangan/v/e/" . hashids_encrypt($subval['id_status_ruangan']);
-													} else {
-														echo "status_ruangan/v/d/" . hashids_encrypt($subval['id_status_ruangan']);
-													}
-												}
-												?>">
-												<div class="room-icon 
-													<?php if ($subval['status_ob'] == 'BELUM' && $subval['status_pengawas'] == 'BELUM') {
-														echo 'icon-red';
-													} elseif ($subval['status_ob'] == 'SUDAH' && $subval['status_pengawas'] == 'BELUM') {
-														echo 'icon-yellow';
-													} elseif ($subval['status_ob'] == 'SUDAH' && $subval['status_pengawas'] == 'SUDAH') {
-														echo 'icon-green';
-													}?>
-												"></div>
-												<div class="room-text"><?php echo $subval['nama_ruangan']; ?></div>
-											</a>
-										</div>
-									<?php endforeach; ?>
-								</div>
-							</div>
-						</div>
-					</div>
-						<?php endforeach; ?>
-				</div>
-			</div>
-			<!-- <div class="row">
-				<div class="col-md-2 col-xs-4 text-center">
-					<a href="">
-						<div class="room-icon"></div>
-						<div class="room-text">Ruang Kakanwil</div>
-					</a>
-				</div>
-				<div class="col-md-2 col-xs-4 text-center">
-					<a href="">
-						<div class="room-icon"></div>
-						<div class="room-text">Ruang Kakanwil</div>
-					</a>
-				</div>
-				<div class="col-md-2 col-xs-4 text-center">
-					<a href="">
-						<div class="room-icon"></div>
-						<div class="room-text">Ruang Kakanwil</div>
-					</a>
-				</div>
-				<div class="col-md-2 col-xs-4 text-center">
-					<a href="">
-						<div class="room-icon"></div>
-						<div class="room-text">Ruang Kakanwil</div>
-					</a>
-				</div>
+      <!-- Add Agenda  -->
+      <?php $this->load->view('agenda/add_agenda'); ?>
 
-			</div> -->
-			
-		</div>
-	</div>
+      <!-- Detail Agenda  -->
+      <?php $this->load->view('agenda/detail_agenda'); ?>
 
+      <!-- Detail Agenda  -->
+      <?php $this->load->view('agenda/edit_agenda'); ?>
 
-</div>
-<!-- end #content -->
+      <!-- Detail Agenda  -->
+      <?php $this->load->view('agenda/delete_agenda'); ?>
+    </div>
+  </div>
+</main>
+  
+<script src="node_modules/fullcalendar/main.js"></script>
+<script src="node_modules/fullcalendar/locales/id.js"></script>
+<script>
+  const agenda = <?php echo json_encode($agenda);  ?>;
+  var arr_events = [];
 
+  agenda.forEach(agendaFunction);
+
+  function agendaFunction(item, index) {
+    arr_events[index] = {
+      title: item.nama,
+      start: item.tanggal
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'id',
+      selectable: true,
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      dateClick: function(info) {
+        var clicked_date = info.dateStr;
+        $.ajax({
+          type:"POST",
+          url: "users/index",
+          data: "clicked_date=" + clicked_date,
+          success: function(data){
+          },
+        });
+      },
+      events: arr_events
+    });
+    calendar.render();
+  });
+
+</script>
+  

@@ -1,35 +1,34 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Mcrud extends CI_Model {
-
- public static function tgl_id($date, $bln='')
- {
-	 date_default_timezone_set('Asia/Singapore');
-		 $str = explode('-', $date);
-		 $bulan = array(
-			 '01' => 'Jan',
-			 '02' => 'Feb',
-			 '03' => 'Mar',
-			 '04' => 'Apr',
-			 '05' => 'Mei',
-			 '06' => 'Jun',
-			 '07' => 'Jul',
-			 '08' => 'Ags',
-			 '09' => 'Sep',
-			 '10' => 'Okt',
-			 '11' => 'Nov',
-			 '12' => 'Des',
-		 );
-		 if ($bln == '') {
-			 $hasil = $str['0'] . "-" . substr($bulan[$str[1]],0,3) . "-" .$str[2];
-		 }elseif ($bln == 'full') {
-			 $hasil = $str['0'] . " " . $bulan[$str[1]] . " " .$str[2];
-		 }else {
-			 $hasil = $bulan[$str[1]];
-		 }
-		 return $hasil;
- }
+class Mcrud extends CI_Model {	
+	public static function tgl_id($date, $bln='')
+	{
+		date_default_timezone_set('Asia/Singapore');
+			$str = explode('-', $date);
+			$bulan = array(
+				'01' => 'Jan',
+				'02' => 'Feb',
+				'03' => 'Mar',
+				'04' => 'Apr',
+				'05' => 'Mei',
+				'06' => 'Jun',
+				'07' => 'Jul',
+				'08' => 'Ags',
+				'09' => 'Sep',
+				'10' => 'Okt',
+				'11' => 'Nov',
+				'12' => 'Des',
+			);
+			if ($bln == '') {
+				$hasil = $str['2'] . "-" . substr($bulan[$str[1]],0,3) . "-" .$str[0];
+			}elseif ($bln == 'full') {
+				$hasil = $str['2'] . " " . $bulan[$str[1]] . " " .$str[0];
+			}else {
+				$hasil = $bulan[$str[1]];
+			}
+			return $hasil;
+	}
 
 	public function hari_id($tanggal)
 	{
@@ -58,6 +57,12 @@ class Mcrud extends CI_Model {
 		return $hari.", ".$tgl;
 	}
 
+	public function jam($data)
+	{
+		$time = date("H:i", strtotime($data));
+		return $time;
+	}
+
 	public function get_user_name_by_id($id)
 	{
 		$user = $this->Guzzle_model->getUserById($id);
@@ -83,7 +88,7 @@ class Mcrud extends CI_Model {
 
 	function judul_web($id='')
 	{
-		$data = 'BRUGAK';
+		$data = '';
 		return $data;
 	}
 
@@ -203,6 +208,5 @@ class Mcrud extends CI_Model {
             echo '<label class="label label-warning">BELUM DIPERIKSA</label>';
         }
 	}
-
 	
 }

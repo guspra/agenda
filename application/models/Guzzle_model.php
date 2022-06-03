@@ -11,7 +11,7 @@ class Guzzle_model extends CI_model {
         $token = $this->session->userdata('token');
 
         $this->_client = new Client([
-            'base_uri' => 'http://localhost/brugakapi/index.php/',
+            'base_uri' => 'localhost/agendaapi/index.php/',
             'headers' => [
                 'Client-Service' => 'frontend-client',
                 'Auth-Key' => 'simplerestapi',
@@ -62,92 +62,54 @@ class Guzzle_model extends CI_model {
         return $result;
     }
 
-     // Model Ruangan
-    public function getAllRuangan()
+     // Model Agenda
+    public function getAllAgenda()
     {
-        $response = $this->_client->request('GET', 'Ruangan');
+        $response = $this->_client->request('GET', 'Agenda');
         $result = json_decode($response->getBody()->getContents(), true);
         return $result;
     }
 
-    public function getRuanganById($id)
+    public function getAgendaByTanggal($tgl)
     {
-        $response = $this->_client->request('GET', 'Ruangan/detail/' . $id);
+        $response = $this->_client->request('GET', 'Agenda/agendaByTanggal/' . $tgl);
         $result = json_decode($response->getBody()->getContents(), true);
         return $result;
     }
 
-    public function createRuangan($data)
+    public function getAgendaById($id)
     {
-        $response = $this->_client->request('POST', 'Ruangan/create', [
+        $response = $this->_client->request('GET', 'Agenda/detail/' . $id);
+        $result = json_decode($response->getBody()->getContents(), true);
+        return $result;
+    }
+
+    public function createAgenda($data)
+    {
+        $response = $this->_client->request('POST', 'Agenda/create', [
             'json' => $data
         ]);
         $result = json_decode($response->getBody()->getContents(), true);
         return $result;
     }
 
-    public function updateRuangan($id, $data)
+    public function updateAgenda($id, $data)
     {
-        $response = $this->_client->request('PUT', 'Ruangan/update/' . $id, [
+        $response = $this->_client->request('PUT', 'Agenda/update/' . $id, [
             'json' => $data
         ]);
         $result = json_decode($response->getBody()->getContents(), true);
         return $result;
     }
 
-    public function deleteRuangan($id)
+    public function deleteAgenda($id)
     {
-        $response = $this->_client->request('DELETE', 'Ruangan/delete/' . $id);
+        $response = $this->_client->request('DELETE', 'Agenda/delete/' . $id);
         $result = json_decode($response->getBody()->getContents(), true);
         return $result;
     }
 
-    // Model Status Ruangan
-    public function getAllStatusRuangan()
-    {
-        $response = $this->_client->request('GET', 'StatusRuangan');
-        $result = json_decode($response->getBody()->getContents(), true);
-        return $result;
-    }
-
-    public function getStatusRuanganById($id)
-    {
-        $response = $this->_client->request('GET', 'StatusRuangan/detail/' . $id);
-        $result = json_decode($response->getBody()->getContents(), true);
-        return $result;
-    }
-
-    public function getStatusRuanganByWaktu($waktu)
-    {
-        $response = $this->_client->request('GET', 'StatusRuangan/statusRuanganByWaktu/' . $waktu);
-        $result = json_decode($response->getBody()->getContents(), true);
-        return $result;
-    }
-
-    public function createStatusRuangan($data)
-    {
-        $response = $this->_client->request('POST', 'StatusRuangan/create', [
-            'json' => $data
-        ]);
-        $result = json_decode($response->getBody()->getContents(), true);
-        return $result;
-    }
-
-    public function updateStatusRuangan($id, $data)
-    {
-        $response = $this->_client->request('PUT', 'StatusRuangan/update/' . $id, [
-            'json' => $data
-        ]);
-        $result = json_decode($response->getBody()->getContents(), true);
-        return $result;
-    }
-
-    public function deleteStatusRuangan($id)
-    {
-        $response = $this->_client->request('DELETE', 'StatusRuangan/delete/' . $id);
-        $result = json_decode($response->getBody()->getContents(), true);
-        return $result;
-    }
+    
 
     
 }
